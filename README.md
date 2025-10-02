@@ -37,9 +37,7 @@ biosecure-risk-maps/
 │   └── AIV/
 ├── results/
 │   ├── ASF/
-│   └── AIV/
-
-
+│  └── AIV/
 
 
 
@@ -49,14 +47,14 @@ biosecure-risk-maps/
 - **Data formats**: `.xlsx`, `.rds`, `.csv`, `.shp`
 - **Visualization**: Static and animated maps saved as `.png`
 
----
+
 
 ##  Outputs
 
 - ASF and AIV risk scores (scaled 0–100)
 - Probability of disease introduction
 - Cluster maps and profiles
-- Scenario comparison maps (e.g., 90% biosecurity improvement)
+- Scenario comparison maps (e.g., 60% biosecurity improvement)
 - Disease introduction maps with labeled regions
 - Probability curves with confidence intervals
 

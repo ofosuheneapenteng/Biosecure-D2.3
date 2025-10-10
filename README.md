@@ -1,62 +1,106 @@
+#  Biosecure Project – Hotspot Mapping Pipeline for Avian Influenza (AIV)
 
-#  Biosecure Risk Mapping Pipelines
+This repository contains the full R-based pipeline for mapping and analyzing Avian Influenza (AIV) risk across NUTS2 regions in the EU. It integrates biosecurity metrics, environmental drivers, and disease case data to estimate regional risk scores and visualize hotspots. 
 
-This repository contains reproducible R scripts for analyzing biosecurity risks of two major transboundary animal diseases:
+**Note the flow or process in the AIV is the same African Swine Fever (ASF) code**
+---
 
-- **African Swine Fever (ASF)**
-- **Avian Influenza Virus (AIV)**
+## Project Structure
 
-Developed as part of the **Biosecure project (EU Horizon 101083923)**, these pipelines integrate heterogeneous interdisciplinary datasets to generate spatial risk maps at the NUTS2 level across the European Union.
+- **Data Sources**:
+  - Biocheck data (2023 & 2024) for poultry types:
+    - Free-range layers
+    - Free-range broilers
+    - Broilers
+    - Laying hens
+  - Bird density and land cover data
+  - AIV poultry case counts
+  - NUTS2 shapefiles and metadata
+
+- **Main Outputs**:
+  - Cleaned and merged datasets
+  - Risk scores and disease introduction probabilities
+  - Spatial visualizations of risk and scenario comparisons
+  - Statistical modeling results (Negative Binomial regression)
+
+---
+
+##  Pipeline Overview
+
+### 1. Data Cleaning & Aggregation
+- Reads and processes Biocheck Excel sheets
+- Aggregates mean scores by region and question ID
+- Merges 2023 and 2024 scores for each poultry type
+
+### 2. Driver Integration
+- Combines bird density and land cover with Biocheck scores
+- Joins AIV case data to form the final modeling dataset
+
+### 3. Modeling
+- Fits a Negative Binomial model using `glmmTMB`
+- Estimates dispersion parameter (theta) via profile likelihood
+- Computes risk scores and disease introduction probabilities
+
+### 4. Visualization
+- Maps risk scores and disease introduction using `ggplot2` and `sf`
+- Compares baseline vs. biosecurity improvement/decrease scenarios
+- Highlights top 15 regions with disease introduction
+
+### 5. Spatial Analysis
+- Computes local spatial autocorrelation (Moran’s I)
+- Generates high-resolution maps and side tables
+
+---
+
+## Key Figures
+
+- `AIV_Figures/asf_risk_score_map.png`: Risk score map
+- `AIV_Figures/disease_risk_map_with_side_legend_tight.png`: Disease introduction map with top regions
+- `AIV_Figures/Risk Score After 20% Biosecurity Increase_map.png`: Scenario comparison (boost)
+- `AIV_Figures/Risk Score After 20% Biosecurity Decrease_map.png`: Scenario comparison (decline)
+
+---
+
+##  Saved RDS Files
+
+- `Free_range_layers_Mean_Value.rds`
+- `Free_range_broilers_Mean_Value.rds`
+- `Broilers_Mean_Value.rds`
+- `Laying_hens_Mean_Value.rds`
+- `nuts2_drivers_biocheck_AIV.rds`
+- `nuts2_risk_sf_aiv.rds`
+- `AIV_Poultry_Birds.rds`
+- `bird_density.rds`
+- `nuts2_land_cover.rds`
+
+---
+
+## Dependencies
+
+Make sure the following R packages are installed:
+
+
+library(sf)
+library(tidyverse)
+library(glmmTMB)
+library(readxl)
+library(giscoR)
+library(eurostat)
+library(ggplot2)
+library(gganimate)
+library(gstat)
+library(sp)
+library(terra)
+library(raster)
+library(lattice)
+library(httr)
+library(utils)
+library(cowplot)
+library(stringr)
+library(spdep)
 
 
 
-## Features
-
-- Integration of epidemiological, biosecurity, environmental, and demographic data
-- Risk modeling using Negative Binomial regression and profile likelihood
-- Scenario simulation for biosecurity improvement
-- Clustering analysis and spatial autocorrelation (Moran’s I)
-- High-resolution geospatial visualizations using ggplot2 and sf
-
-
-
-##  Repository Structure
-
-
-biosecure-risk-maps/
-├── README.md
-├── LICENSE
-├── scripts/
-│   ├── ASF_pipeline.R
-│   └── AIV_pipeline.R
-├── data/
-│   ├── example_inputs/
-│   └── processed_rds/
-├── figures/
-│   ├── ASF/
-│   └── AIV/
-├── results/
-│   ├── ASF/
-│  └── AIV/
-
-
-
-## Technologies Used
-
-- **R packages**: `sf`, `tidyverse`, `ggplot2`, `glmmTMB`, `MASS`, `car`, `cluster`, `spdep`, `readxl`, `terra`, `giscoR`, `eurostat`, `gganimate`, `gstat`, `cowplot`, `ggrepel`, and more
-- **Data formats**: `.xlsx`, `.rds`, `.csv`, `.shp`
-- **Visualization**: Static and animated maps saved as `.png`
-
-
-
-##  Outputs
-
-- ASF and AIV risk scores (scaled 0–100)
-- Probability of disease introduction
-- Cluster maps and profiles
-- Scenario comparison maps (e.g., + or - 20% biosecurity improvement)
-- Disease introduction maps with labeled regions
-- Probability curves with confidence intervals
 
  ## Author
 

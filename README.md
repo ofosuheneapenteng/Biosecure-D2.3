@@ -54,7 +54,7 @@ biosecure-risk-maps/
 - ASF and AIV risk scores (scaled 0–100)
 - Probability of disease introduction
 - Cluster maps and profiles
-- Scenario comparison maps (e.g., 60% biosecurity improvement)
+- Scenario comparison maps (e.g., + or - 20% biosecurity improvement)
 - Disease introduction maps with labeled regions
 - Probability curves with confidence intervals
 

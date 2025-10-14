@@ -55,20 +55,6 @@ This repository follows the **FAIR data principles** to ensure that all resource
 
 ---
 
-##  Saved RDS Files
-
-- `Free_range_layers_Mean_Value.rds`
-- `Free_range_broilers_Mean_Value.rds`
-- `Broilers_Mean_Value.rds`
-- `Laying_hens_Mean_Value.rds`
-- `nuts2_drivers_biocheck_AIV.rds`
-- `nuts2_risk_sf_aiv.rds`
-- `AIV_Poultry_Birds.rds`
-- `bird_density.rds`
-- `nuts2_land_cover.rds`
-
----
-
 ## Dependencies
 
 Make sure the following R packages are installed:

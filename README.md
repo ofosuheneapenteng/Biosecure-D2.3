@@ -55,15 +55,6 @@ This repository follows the **FAIR data principles** to ensure that all resource
 
 ---
 
-## Key Figures
-
-- `AIV_Figures/asf_risk_score_map.png`: Risk score map
-- `AIV_Figures/disease_risk_map_with_side_legend_tight.png`: Disease introduction map with top regions
-- `AIV_Figures/Risk Score After 20% Biosecurity Increase_map.png`: Scenario comparison (boost)
-- `AIV_Figures/Risk Score After 20% Biosecurity Decrease_map.png`: Scenario comparison (decline)
-
----
-
 ##  Saved RDS Files
 
 - `Free_range_layers_Mean_Value.rds`

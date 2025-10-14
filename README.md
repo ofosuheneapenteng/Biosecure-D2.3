@@ -24,6 +24,8 @@ This repository contains the full R-based pipeline for mapping and analyzing Avi
   - Statistical modeling results (Negative Binomial regression)
 
 ---
+## FAIR Data Principles
+This repository follows the **FAIR data principles** to ensure that all resources are **Findable, Accessible, Interoperable, and Reusable**. The open-source R code is fully documented and version-controlled, and the harmonised datasets are structured to support reproducibility and integration with other tools and workflows. By aligning with FAIR standards, this project promotes transparency, encourages collaboration, and supports the broader research community in advancing spatial risk mapping for disease surveillance.
 
 ##  Pipeline Overview
 

@@ -79,6 +79,6 @@ library(spdep)
 
  ## Author
 
-This R code was developed and written by **Ofosuhene Okofrobour Apenteng**,for mapping biosecurity risks of African Swine Fever (ASF) and Avian Influenza Virus (AIV) across EU regions. Developed for the Biosecure project (EU Horizon 101083923).
+This R code was developed and written by **Ofosuhene Okofrobour Apenteng**,for mapping biosecurity risks of African Swine Fever (ASF) and Highly Pathogenic Avian Influenza (HPAI) across EU regions. Developed for the Biosecure project (EU Horizon 101083923).
 
 

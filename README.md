@@ -2,7 +2,7 @@
 
 This repository contains the full R-based pipeline for mapping and analyzing Avian Influenza (AIV) risk across NUTS2 regions in the EU. It integrates biosecurity metrics, environmental drivers, and disease case data to estimate regional risk scores and visualize hotspots. 
 
-**Note the flow or process in the HPAI is the same African Swine Fever (ASF) code**
+**Note the flow or process in the HPAI is the same ASF code**
 ---
 
 ## Project Structure

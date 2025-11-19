@@ -1,8 +1,8 @@
-#  Biosecure Project – Hotspot Mapping Pipeline for Avian Influenza (AIV) and African Swine Fever (ASF)
+#  Biosecure Project – Hotspot Mapping Pipeline for Highly Pathogenic Avian Influenza (HPAI) and African Swine Fever (ASF)
 
 This repository contains the full R-based pipeline for mapping and analyzing Avian Influenza (AIV) risk across NUTS2 regions in the EU. It integrates biosecurity metrics, environmental drivers, and disease case data to estimate regional risk scores and visualize hotspots. 
 
-**Note the flow or process in the AIV is the same African Swine Fever (ASF) code**
+**Note the flow or process in the HPAI is the same African Swine Fever (ASF) code**
 ---
 
 ## Project Structure
@@ -48,11 +48,6 @@ This repository follows the **FAIR data principles** to ensure that all resource
 - Maps risk scores and disease introduction using `ggplot2` and `sf`
 - Compares baseline vs. biosecurity improvement/decrease scenarios
 - Highlights top 15 regions with disease introduction
-
-### 5. Spatial Analysis
-- Computes local spatial autocorrelation (Moran’s I)
-- Generates high-resolution maps and side tables
-
 ---
 
 ## Dependencies

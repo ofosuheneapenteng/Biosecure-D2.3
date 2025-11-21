@@ -1,6 +1,4 @@
 
-# ------------ Analysis Begins here---------------
-
 rm(list = objects())
 
 # Load libraries
@@ -18,17 +16,17 @@ nuts2_sf <- nuts_sf %>% filter(LEVL_CODE == 2)
 nuts2 <- nuts2_sf
 
 # Load data
-AI_nuts2_outbreaks <- readRDS("AI_nuts2_outbreaks.rds")
+AI_nuts2_outbreaks <- readRDS("AI_nuts2_outbreaks_poultry.rds")
 
 #------------Plotting the biosecurity values--------------
-
-# Pig density
-p_bird <- ggplot(AI_nuts2_outbreaks) +
-  geom_sf(aes(fill = bird_density), color = "white", size = 0.1) +
+# 
+# # Poultry density
+p_poultry <- ggplot(AI_nuts2_outbreaks) +
+  geom_sf(aes(fill = poultry_density), color = "white", size = 0.1) +
   scale_fill_viridis_c(option = "inferno") +
   labs(
-    title = "Bird density Level by NUTS2 Region",
-    fill = bquote("Inhabitants / km"^2)
+    title = "Poultry density Level by NUTS2 Region",
+    fill = bquote("Head / km"^2)
   ) +
   coord_sf(
     xlim = c(-10, 55),
@@ -41,7 +39,7 @@ p_bird <- ggplot(AI_nuts2_outbreaks) +
     axis.title = element_blank()
   )
 
-print(p_bird)
+print(p_poultry)
 
 
 # Step 17: Save the plot
@@ -50,8 +48,8 @@ if (!dir.exists("AI_Risk_Figures")) {
 }
 
 ggsave(
-  filename = "AI_Risk_Figures/bird density.png",
-  plot = p_bird,
+  filename = "AI_Risk_Figures/Poultry_Correct density.png",
+  plot = p_poultry,
   width = 10,
   height = 8,
   dpi = 300
@@ -62,7 +60,7 @@ ggsave(
 p_FRL <- ggplot(AI_nuts2_outbreaks) +
   geom_sf(aes(fill = Free_range_layers_Mean_value), color = "white", size = 0.1) +
   scale_fill_viridis_c(option = "inferno") + #"plasma"
-  labs(title = "Free range layers mean value by NUTS2 Region", 
+  labs(title = "Free range layers mean value for birds by NUTS2 Region",
        caption = "Grey = all NUTS2 regions without free range layers mean value.",
        fill = "Free_range_layers_Mean_value") +
   coord_sf(
@@ -95,7 +93,7 @@ ggsave(
 p_FRB <- ggplot(AI_nuts2_outbreaks) +
   geom_sf(aes(fill = Free_range_broilers_Mean_value), color = "white", size = 0.1) +
   scale_fill_viridis_c(option = "inferno") + #"plasma"
-  labs(title = "Free range broilers mean value for pig by NUTS2 Region",
+  labs(title = "Free range broilers mean value for birds by NUTS2 Region",
        caption = "Grey = all NUTS2 regions without free range broilers mean value.",
        fill = "Free_range_broilers_Mean_value") +
   coord_sf(
@@ -129,7 +127,7 @@ ggsave(
 p_Broiler <- ggplot(AI_nuts2_outbreaks) +
   geom_sf(aes(fill = Broilers_Mean_value), color = "white", size = 0.1) +
   scale_fill_viridis_c(option = "inferno") + #"plasma"
-  labs(title = "Broilers mean value for pig by NUTS2 Region", 
+  labs(title = "Broilers mean value for birds by NUTS2 Region",
        caption = "Grey = all NUTS2 regions without broilers mean value.",
        fill = "Broilers_Mean_value") +
   coord_sf(
@@ -162,7 +160,7 @@ ggsave(
 p_Laying <- ggplot(AI_nuts2_outbreaks) +
   geom_sf(aes(fill = Laying_hens_Mean_value), color = "white", size = 0.1) +
   scale_fill_viridis_c(option = "inferno") + #"plasma" , limits = c(0, 100)
-  labs(title = "Broilers mean value for pig by NUTS2 Region", 
+  labs(title = "Laying hen mean value for birds by NUTS2 Region",
        caption = "Grey = all NUTS2 regions without laying hens mean value.",
        fill = "Laying_hens_Mean_value") +
   coord_sf(
@@ -195,7 +193,7 @@ ggsave(
 p_land <- ggplot(AI_nuts2_outbreaks) +
   geom_sf(aes(fill = land_cover_code), color = "white", size = 0.1) +
   scale_fill_viridis_c(option = "inferno") + #"plasma" , limits = c(0, 100)
-  labs(title = "Land cover by NUTS2 Region", 
+  labs(title = "Land cover by NUTS2 Region",
        caption = "Grey = all NUTS2 regions without land cover.",
        fill = "Land cover ") +
   coord_sf(
@@ -241,7 +239,8 @@ AI_nuts2_outbreaks_baseline <- AI_nuts2_outbreaks %>%
 # Step 2: Filter complete cases
 AI_model_data_baseline <- AI_nuts2_outbreaks_baseline %>%
   filter(!is.na(outbreak_count),
-         !is.na(bird_density),
+         !is.na(poultry_density),
+         !is.na(chicken_density),
          !is.na(Free_range_layers_Mean_value),
          !is.na(land_cover_name),
          !is.na(Free_range_broilers_Mean_value),
@@ -276,10 +275,10 @@ AI_model_data_balanced_baseline <- AI_model_data_balanced_baseline %>%
 
 # Step 6: Fit logistic regression model
 logit_model_baseline <- glm(
-  outbreak_binary ~ bird_density + grouped_land_cover + Broilers_Mean_value + Laying_hens_Mean_value,
+  outbreak_binary ~ poultry_density + grouped_land_cover + Broilers_Mean_value + Laying_hens_Mean_value,
   data = AI_model_data_balanced_baseline,
   family = binomial(link = "logit")
-)
+) #chicken_density +
 
 # Step 7: Get odds ratios and 95% confidence intervals
 odds_ratio_table_case_baseline <- broom.mixed::tidy(
@@ -344,7 +343,7 @@ b_equl_baseline <- ggplot() +
           aes(color = "Outbreak Cases"), shape = 16, size = 2) +
   geom_sf(data = AI_filtered_baseline |> filter(outbreak_binary == 0), 
           aes(color = "Control Regions"), shape = 16, size = 2) +
-  scale_fill_viridis_c(name = "Mean HPAI Risk", option = "inferno") +
+  scale_fill_viridis_c(name = "Risk score", option = "inferno") +
   scale_color_manual(
     name = "Outbreak Classification",
     values = c("Outbreak Cases" = "red", "Control Regions" = "blue")
@@ -360,7 +359,7 @@ print(b_equl_baseline)
 
 # Step 17: Save the plot
 ggsave(
-  filename = "AI_Risk_Figures/ai_bird_both_only_baseline.png",
+  filename = "AI_Risk_Figures/ai_poultry_both_only_baseline.png",
   plot = b_equl_baseline,
   width = 10,
   height = 8,
@@ -385,7 +384,7 @@ nuts2_sf <- nuts_sf %>% filter(LEVL_CODE == 2)
 nuts2 <- nuts2_sf
 
 # Load data
-AI_nuts2_outbreaks <- readRDS("AI_nuts2_outbreaks.rds")
+AI_nuts2_outbreaks <- readRDS("AI_nuts2_outbreaks_poultry.rds")
 
 # Step 1: Impute missing values and decrease broiler and laying hen values by 20%
 AI_nuts2_outbreaks_up <- AI_nuts2_outbreaks %>%
@@ -403,7 +402,8 @@ AI_nuts2_outbreaks_up <- AI_nuts2_outbreaks %>%
 # Step 2: Filter complete cases
 AI_model_data_up <- AI_nuts2_outbreaks_up %>%
   filter(!is.na(outbreak_count),
-         !is.na(bird_density),
+         !is.na(poultry_density),
+         !is.na(chicken_density),
          !is.na(Free_range_layers_Mean_value),
          !is.na(land_cover_name),
          !is.na(Free_range_broilers_Mean_value),
@@ -438,7 +438,7 @@ AI_model_data_balanced_up <- AI_model_data_balanced_up %>%
 
 # Step 6: Fit logistic regression model
 logit_model_up <- glm(
-  outbreak_binary ~ bird_density + grouped_land_cover + Broilers_Mean_value + Laying_hens_Mean_value,
+  outbreak_binary ~ poultry_density + chicken_density + grouped_land_cover + Broilers_Mean_value + Laying_hens_Mean_value,
   data = AI_model_data_balanced_up,
   family = binomial(link = "logit")
 )
@@ -506,7 +506,7 @@ b_equl_up <- ggplot() +
           aes(color = "Outbreak Cases"), shape = 16, size = 2) +
   geom_sf(data = AI_filtered_up |> filter(outbreak_binary == 0), 
           aes(color = "Control Regions"), shape = 16, size = 2) +
-  scale_fill_viridis_c(name = "Mean HPAI Risk", option = "inferno") +
+  scale_fill_viridis_c(name = "Risk score", option = "inferno") +
   scale_color_manual(
     name = "Outbreak Classification",
     values = c("Outbreak Cases" = "red", "Control Regions" = "blue")
@@ -514,7 +514,7 @@ b_equl_up <- ggplot() +
   coord_sf(xlim = c(-10, 55), ylim = c(35, 70)) +
   theme_minimal() +
   labs(
-    title = "AI Risk Map (20% Increase in Broilers & Laying Hens)",
+    title = "HPAI Risk Map (20% Increase in Broilers & Laying Hens)",
     caption = "Grey = all NUTS2 regions; colored = regions with outbreak OR control and valid risk score."
   )
 
@@ -522,12 +522,14 @@ print(b_equl_up)
 
 # Step 17: Save the plot
 ggsave(
-  filename = "AI_Risk_Figures/ai_bird_both_only_20_up.png",
+  filename = "AI_Risk_Figures/ai_poultry_both_only_20_up.png",
   plot = b_equl_up,
   width = 10,
   height = 8,
   dpi = 300
-)
+) 
+
+
 #--------------------------------------- 20% Decreased-----------------------------
 
 
@@ -548,7 +550,7 @@ nuts2_sf <- nuts_sf %>% filter(LEVL_CODE == 2)
 nuts2 <- nuts2_sf
 
 # Load data
-AI_nuts2_outbreaks <- readRDS("AI_nuts2_outbreaks.rds")
+AI_nuts2_outbreaks <- readRDS("AI_nuts2_outbreaks_poultry.rds")
 
 # Step 1: Impute missing values and decrease broiler and laying hen values by 20%
 AI_nuts2_outbreaks_down <- AI_nuts2_outbreaks %>%
@@ -566,7 +568,8 @@ AI_nuts2_outbreaks_down <- AI_nuts2_outbreaks %>%
 # Step 2: Filter complete cases
 AI_model_data_down <- AI_nuts2_outbreaks_down %>%
   filter(!is.na(outbreak_count),
-         !is.na(bird_density),
+         !is.na(poultry_density),
+         !is.na(chicken_density),
          !is.na(Free_range_layers_Mean_value),
          !is.na(land_cover_name),
          !is.na(Free_range_broilers_Mean_value),
@@ -601,7 +604,7 @@ AI_model_data_balanced_down <- AI_model_data_balanced_down %>%
 
 # Step 6: Fit logistic regression model
 logit_model_down <- glm(
-  outbreak_binary ~ bird_density + grouped_land_cover + Broilers_Mean_value + Laying_hens_Mean_value,
+  outbreak_binary ~ poultry_density + chicken_density + grouped_land_cover + Broilers_Mean_value + Laying_hens_Mean_value,
   data = AI_model_data_balanced_down,
   family = binomial(link = "logit")
 )
@@ -669,7 +672,7 @@ b_equl_down <- ggplot() +
           aes(color = "Outbreak Cases"), shape = 16, size = 2) +
   geom_sf(data = AI_filtered_down |> filter(outbreak_binary == 0), 
           aes(color = "Control Regions"), shape = 16, size = 2) +
-  scale_fill_viridis_c(name = "Mean HPAI Risk", option = "inferno") +
+  scale_fill_viridis_c(name = "Risk score", option = "inferno") +
   scale_color_manual(
     name = "Outbreak Classification",
     values = c("Outbreak Cases" = "red", "Control Regions" = "blue")
@@ -677,7 +680,7 @@ b_equl_down <- ggplot() +
   coord_sf(xlim = c(-10, 55), ylim = c(35, 70)) +
   theme_minimal() +
   labs(
-    title = "AI Risk Map (20% Decrease in Broilers & Laying Hens)",
+    title = "HPAI Risk Map (20% Decrease in Broilers & Laying Hens)",
     caption = "Grey = all NUTS2 regions; colored = regions with outbreak OR control and valid risk score."
   )
 
@@ -685,7 +688,7 @@ print(b_equl_down)
 
 # Step 17: Save the plot
 ggsave(
-  filename = "AI_Risk_Figures/ai_bird_both_only_20_down.png",
+  filename = "AI_Risk_Figures/ai_poultry_both_only_20_down.png",
   plot = b_equl_down,
   width = 10,
   height = 8,
